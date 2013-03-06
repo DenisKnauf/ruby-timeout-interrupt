@@ -1,22 +1,17 @@
-ruby-timeout-interrupt
-======================
+timeout-interrupt
+=================
 
-Description goes here.
+Works like ruby's timeout, but interrupts every call, also syscalls, which blocks the hole ruby-process.
 
-Contributing to ruby-timeout-interrupt
-======================================
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
-* Fork the project.
-* Start a feature/bugfix branch.
-* Commit and push until you are happy with your contribution.
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+It uses POSIX's alarm and traps ALRM-signals.
 
-Copyright
+Known limitations bacause of alarm and ALRM are, that you can not use alarm or trap ALRM.
+
+Do not forget, syscall can have allocated memory.
+If you interrupt a call, which can not free his allocations, you will have a memory leak.
+So, use it only, if your process did not live any longer or if you call something, which never allocate mem
+
+Copyleft
 =========
 
-Copyright (c) 2013 Denis Knauf. See LICENSE.txt for
-further details.
-
+Copyright (c) 2013 Denis Knauf. See LICENSE.txt for further details.

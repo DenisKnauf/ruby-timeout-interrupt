@@ -17,7 +17,7 @@ require 'ffi/libc'
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-require 'ruby-timeout-interrupt'
+require 'timeout_interrupt'
 
 class Test::Unit::TestCase
 end
