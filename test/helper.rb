@@ -10,8 +10,13 @@ end
 require 'test/unit'
 require 'shoulda'
 
+require 'timeout'
+require 'benchmark'
+require 'ffi/libc'
+
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
+
 require 'ruby-timeout-interrupt'
 
 class Test::Unit::TestCase
