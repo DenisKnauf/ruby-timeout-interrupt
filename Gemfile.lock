@@ -1,0 +1,50 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activesupport (3.2.12)
+      i18n (~> 0.6)
+      multi_json (~> 1.0)
+    bourne (1.1.2)
+      mocha (= 0.10.5)
+    ffi (1.1.0)
+    ffi-libc (0.0.5)
+      ffi (>= 0.6.0, <= 1.1.0)
+    git (1.2.5)
+    i18n (0.6.4)
+    jeweler (1.8.4)
+      bundler (~> 1.0)
+      git (>= 1.2.5)
+      rake
+      rdoc
+    json (1.7.7)
+    metaclass (0.0.1)
+    mocha (0.10.5)
+      metaclass (~> 0.0.1)
+    multi_json (1.6.1)
+    rake (10.0.3)
+    rdoc (4.0.0)
+      json (~> 1.4)
+    shoulda (3.3.2)
+      shoulda-context (~> 1.0.1)
+      shoulda-matchers (~> 1.4.1)
+    shoulda-context (1.0.2)
+    shoulda-matchers (1.4.2)
+      activesupport (>= 3.0.0)
+      bourne (~> 1.1.2)
+    simplecov (0.7.1)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.7.1)
+    simplecov-html (0.7.1)
+    yard (0.8.5.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler
+  ffi-libc
+  jeweler
+  rdoc
+  shoulda
+  simplecov
+  yard
