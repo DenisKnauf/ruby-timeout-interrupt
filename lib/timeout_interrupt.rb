@@ -7,43 +7,67 @@ module FFI
 	end
 end
 
+module TimeoutInterruptSingleton
+	class <<self
+		def timeouts thread = nil
+			@timeouts ||= Hash.new {|h,k| h[k] = [] }
+			thread = Thread.current  if thread.kind_of? Thread
+			thread ? @timeouts[thread] : @timeouts
+		end
+
+		def alarm_trap sig
+			key, (at, bt, exception) = self.timeouts.min_by {|key,(at,bt,ex)| at }
+			return  if Time.now < at
+			raise exception, 'execution expired', bt
+		end
+
+		def setup
+			if timeouts.empty?
+				Signal.trap( 'ALRM') {}
+				FFI::LibC.alarm 0
+			else
+				key, (at, bt) = timeouts.min_by {|key,(at,bt)| at }
+				secs = (at - Time.now)
+				alarm_trap 14  if 0 > secs
+				Signal.trap 'ALRM', &method( :alarm_trap)
+				FFI::LibC.alarm secs.to_i+1
+			end
+		end
+
+		def timeout seconds = nil, exception = nil
+			return setup  if seconds.nil?
+			seconds = seconds.to_i
+			exception ||= TimeoutInterrupt::Error
+			raise exception, "Timeout must be longer than '0' seconds."  unless 0 < seconds
+			unless block_given?
+				return lambda {|&e|
+					raise exception, "Expect a lambda."  unless e
+					timeout seconds, exception, &e
+				}
+			end
+			at = Time.now + seconds
+			key, bt = Random.rand( 2**64-1), Kernel.caller
+			begin
+				self.timeouts[key] = [at, bt, exception]
+				setup
+				yield
+			ensure
+				self.timeouts.delete key
+				setup
+			end
+		end
+	end
+end
+
 module TimeoutInterrupt
-	def self.timeouts
-		@timeouts ||= {}
+	class Error < Timeout::Error
 	end
 
-	def self.alarm_trap sig
-		key, (at, bt) = TimeoutInterrupt.timeouts.min_by {|key,(at,bt)| at }
-		return  if Time.now < at
-		raise Timeout::Error, 'execution expired', bt
+	def self.timeout seconds = nil, exception = nil, &e
+		TimeoutInterruptSingleton.timeout seconds, exception, &e
 	end
 
-	def self.setup_timeout
-		if TimeoutInterrupt.timeouts.empty?
-			Signal.trap( 'ALRM') {}
-			FFI::LibC.alarm 0
-		else
-			key, (at, bt) = TimeoutInterrupt.timeouts.min_by {|key,(at,bt)| at }
-			secs = (at - Time.now).to_i+1
-			TimeoutInterrupt.alarm_trap  if 1 > secs
-			Signal.trap 'ALRM', &TimeoutInterrupt.method( :alarm_trap)
-			FFI::LibC.alarm secs
-		end
-	end
-
-	def self.timeout seconds
-		seconds = seconds.to_i
-		raise Timeout::Error, "Timeout must be longer than '0' seconds."  unless 0 < seconds
-		return lambda {|&e| self.timeout seconds, &e }  unless block_given?
-		at = Time.now + seconds
-		key, bt = Random.rand( 2**64-1), Kernel.caller
-		begin
-			TimeoutInterrupt.timeouts[key] = [at, bt]
-			TimeoutInterrupt.setup_timeout
-			yield
-		ensure
-			TimeoutInterrupt.timeouts.delete key
-			TimeoutInterrupt.setup_timeout
-		end
+	def timeout seconds = nil, exception = nil, &e
+		TimeoutInterruptSingleton.timeout seconds, exception, &e
 	end
 end
