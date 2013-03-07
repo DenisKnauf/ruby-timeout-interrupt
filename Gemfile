@@ -7,6 +7,7 @@ gem 'ffi-libc'
 group :development do
   gem "shoulda"
   gem "yard"
+	gem "redcarpet"
   gem "rdoc"
   gem "bundler"
   gem "jeweler"
