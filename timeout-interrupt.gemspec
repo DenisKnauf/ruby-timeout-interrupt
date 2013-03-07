@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "timeout-interrupt"
-  s.version = "0.1.1"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Denis Knauf"]
-  s.date = "2013-03-06"
+  s.date = "2013-03-07"
   s.description = "Timeout-lib, which interrupts everything, also systemcalls. It uses libc-alarm."
   s.email = "Denis.Knauf@gmail.com"
   s.extra_rdoc_files = [
@@ -26,7 +26,8 @@ Gem::Specification.new do |s|
     "VERSION",
     "lib/timeout_interrupt.rb",
     "test/helper.rb",
-    "test/test_ruby-timeout-interrupt.rb"
+    "test/test_ruby-timeout-interrupt.rb",
+    "timeout-interrupt.gemspec"
   ]
   s.homepage = "http://github.com/DenisKnauf/ruby-timeout-interrupt"
   s.licenses = ["AGPLv3"]
