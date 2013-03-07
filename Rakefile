@@ -16,7 +16,7 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "timeout-interrupt"
   gem.homepage = "http://github.com/DenisKnauf/ruby-timeout-interrupt"
-  gem.license = "AGPLv3"
+  gem.license = "LGPLv3"
   gem.summary = %Q{"Interrupts systemcalls too."}
   gem.description = %Q{Timeout-lib, which interrupts everything, also systemcalls. It uses libc-alarm.}
   gem.email = "Denis.Knauf@gmail.com"
