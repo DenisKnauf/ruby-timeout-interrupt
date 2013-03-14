@@ -74,9 +74,10 @@ module TimeoutInterruptSingleton
 
 		# Creates a timeout and calls your block, which has to finish before timeout occurs.
 		#
+		# @param seconds [0]           No timeout, so block can take any time.
 		# @param seconds [Integer]     In `seconds` Seconds, it should raise a timeout, if not finished.
-		# @param seconds [nil]         Everything will be ignored and
-		#                             it will call {setup} for checking and preparing next known timeout.
+		# @param seconds [nil]         If also no block given, everything will be ignored and
+		#                              it will call {setup} for checking and preparing next known timeout.
 		# @param exception [Exception] which will be raised if timed out.
 		# @param exception [nil]       `TimeoutInterrupt::Error` will be used to raise.
 		# @param block [Proc]          Will be called and should finish its work before it timed out.
@@ -102,6 +103,7 @@ module TimeoutInterruptSingleton
 		# @see TimeoutInterrupt#timeout
 		# @raise exception
 		def timeout seconds = nil, exception = nil, &block
+			return yield( seconds)  if seconds.nil? || 0 == seconds  if block_given?
 			return setup  if seconds.nil?
 			seconds = seconds.to_i
 			exception ||= TimeoutInterrupt::Error
@@ -117,7 +119,7 @@ module TimeoutInterruptSingleton
 			begin
 				self.timeouts[key] = [at, bt, exception]
 				setup
-				yield
+				yield seconds
 			ensure
 				self.timeouts.delete key
 				setup
@@ -140,9 +142,10 @@ module TimeoutInterrupt
 
 	# Creates a timeout and calls your block, which has to finish before timeout occurs.
 	#
+	# @param seconds [0]           No timeout, so block can take any time.
 	# @param seconds [Integer]     In `seconds` Seconds, it should raise a timeout, if not finished.
-	# @param seconds [nil]         Everything will be ignored and
-	#     it will call {TimeoutInterruptSingleton.setup} for checking and preparing next known timeout.
+	# @param seconds [nil]         If also no block given, everything will be ignored and
+	#                              it will call {setup} for checking and preparing next known timeout.
 	# @param exception [Exception] which will be raised if timed out.
 	# @param exception [nil]       `TimeoutInterrupt::Error` will be used to raise.
 	# @param block [Proc]          Will be called and should finish its work before it timed out.
@@ -173,9 +176,10 @@ module TimeoutInterrupt
 
 	# Creates a timeout and calls your block, which has to finish before timeout occurs.
 	#
+	# @param seconds [0]           No timeout, so block can take any time.
 	# @param seconds [Integer]     In `seconds` Seconds, it should raise a timeout, if not finished.
-	# @param seconds [nil]         Everything will be ignored and
-	#     it will call {TimeoutInterruptSingleton.setup} for checking and preparing next known timeout.
+	# @param seconds [nil]         If also no block given, everything will be ignored and
+	#                              it will call {setup} for checking and preparing next known timeout.
 	# @param exception [Exception] which will be raised if timed out.
 	# @param exception [nil]       `TimeoutInterrupt::Error` will be used to raise.
 	# @param block [Proc]          Will be called and should finish its work before it timed out.

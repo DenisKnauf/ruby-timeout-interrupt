@@ -152,4 +152,11 @@ class TestRubyTimeoutInterrupt < Test::Unit::TestCase
 			end
 		end
 	end
+
+	should "not timeout, if timeout is 0" do
+		assert_nothing_raised TimeoutInterrupt::Error, "Unexpected Timed out." do
+			# should never timeout (we can not wait infinity seconds, so only 5)
+			TimeoutInterrupt.timeout( 0) { sleep 5 }
+		end
+	end
 end
