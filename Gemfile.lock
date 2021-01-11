@@ -24,7 +24,7 @@ GEM
     rake (10.0.3)
     rdoc (4.0.0)
       json (~> 1.4)
-    redcarpet (2.2.2)
+    redcarpet (3.5.1)
     shoulda (3.3.2)
       shoulda-context (~> 1.0.1)
       shoulda-matchers (~> 1.4.1)
